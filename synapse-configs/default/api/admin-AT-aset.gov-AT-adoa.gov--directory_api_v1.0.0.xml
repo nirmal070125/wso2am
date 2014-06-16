@@ -51,6 +51,58 @@
             <send/>
         </outSequence>
     </resource>
+    <resource methods="GET" url-mapping="/get_orglist">
+        <inSequence>
+            <property name="POST_TO_URI" value="true" scope="axis2"/>
+            <filter source="$ctx:AM_KEY_TYPE" regex="PRODUCTION">
+                <then>
+                    <send>
+                        <endpoint name="admin-AT-aset.gov-AT-adoa.gov--directory_api_APIproductionEndpoint_1">
+                            <http uri-template="http://esb.devaz.gov:80/t/adoa.gov/directory">
+                                <timeout>
+                                    <duration>30000</duration>
+                                    <responseAction>fault</responseAction>
+                                </timeout>
+                                <suspendOnFailure>
+                                    <errorCodes>-1</errorCodes>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1.0</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <errorCodes>-1</errorCodes>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </send>
+                </then>
+                <else>
+                    <send>
+                        <endpoint name="admin-AT-aset.gov-AT-adoa.gov--directory_api_APIsandboxEndpoint_1">
+                            <http uri-template="http://esb.devaz.gov:80/t/adoa.gov/directory">
+                                <timeout>
+                                    <duration>30000</duration>
+                                    <responseAction>fault</responseAction>
+                                </timeout>
+                                <suspendOnFailure>
+                                    <errorCodes>-1</errorCodes>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1.0</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <errorCodes>-1</errorCodes>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </send>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+    </resource>
     <handlers>
         <handler class="org.wso2.carbon.apimgt.gateway.handlers.security.APIAuthenticationHandler"/>
         <handler class="org.wso2.carbon.apimgt.gateway.handlers.throttling.APIThrottleHandler">
